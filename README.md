@@ -24,6 +24,7 @@
   <a href="#rocket-sobre-o-desafio">Sobre o desafio</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#calendar-entrega">Entrega</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#memo-licença">Licença</a>
+  <a href="#100-onde-fui-além">Adendo</a>
 </p>
 
 ## :rocket: Sobre o desafio
@@ -101,6 +102,24 @@ Para esse desafio temos os seguintes testes:
 ## :calendar: Entrega
 
 Esse desafio deve ser entregue a partir da plataforma Skylab, envie o link do repositório que você fez suas alterações. Após concluir o desafio, fazer um post no Linkedin e postar o código no Github é uma boa forma de demonstrar seus conhecimentos e esforços para evoluir na sua carreira para oportunidades futuras.
+
+## :100: Onde fui além
+
+Mais do que fora pedido no desafio, resolvi implementar um Query Param no get request para poder pesquisar os repositórios por id, conforme código abaixo:
+
+```js
+app.get("/repositories", (request, response) => {
+  const { id } = request.query;
+
+  if (!id) {
+    return response.json(repositories);
+  } else {
+    return response.json(
+      repositories.filter( repo => repo.id.includes(id))
+    );
+  }
+});
+```
 
 ## :memo: Licença
 
