@@ -41,6 +41,10 @@ app.put("/repositories/:id", (request, response) => {
   const { id } = request.params;
   const {title, url, techs} = request.body;
 
+  const repositoryList = repositories.filter(
+    repo => repo.id === id
+  );
+
   const repositoryIndex = repositories.findIndex(
     repo => repo.id === id
   );
@@ -51,16 +55,20 @@ app.put("/repositories/:id", (request, response) => {
     })
   }
 
+  const oldRepositoryId = repositoryList[0].id;
+  const oldRespositoryLikes = repositoryList[0].likes;
 
-  const repository = {
+  const newRepository = {
+    id: oldRepositoryId,
     title,
     url,
     techs,
+    likes: oldRespositoryLikes,
   }
 
-  repositories[repositoryIndex] = repository;
-  
-  return response.json(repository);
+  repositories[repositoryIndex] = newRepository;
+
+  return response.json(newRepository);
 });
 
 app.delete("/repositories/:id", (request, response) => {
@@ -76,11 +84,9 @@ app.delete("/repositories/:id", (request, response) => {
     });
   }
 
-  repositories.slice(repositoryIndex, 1);
+  repositories.splice(repositoryIndex, 1);
 
-  return response.json({
-    message: "Repository deleted"
-  });
+  return response.status(204).json(undefined);
 });
 
 app.post("/repositories/:id/like", (request, response) => {
@@ -96,9 +102,13 @@ app.post("/repositories/:id/like", (request, response) => {
     })
   }
 
-  const repository = repositories[repositoryIndex].likes = likes + 1; 
+  repositories[repositoryIndex].likes += 1;
+  
+  const repositoryLikes = repositories[repositoryIndex].likes
 
-  return response.json(repository)
+  return response.json({
+    likes: repositoryLikes,
+  })
 });
 
 module.exports = app;
